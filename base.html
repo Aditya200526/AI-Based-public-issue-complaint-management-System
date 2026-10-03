@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CivicAI{% endblock %} | Public Issue Complaint System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('index') }}" class="brand">
+                🏛️ CivicAI
+            </a>
+            <div class="nav-links">
+                {% if session.get('user_id') %}
+                    {% if session.get('is_admin') %}
+                        <a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
+                    {% else %}
+                        <a href="{{ url_for('user_dashboard') }}">My Complaints</a>
+                        <a href="{{ url_for('submit_complaint') }}">Submit Complaint</a>
+                    {% endif %}
+                    <span style="opacity:0.8">Hi, {{ session.get('name') }}</span>
+                    <a href="{{ url_for('logout') }}" class="btn btn-outline btn-sm">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}">Login</a>
+                    <a href="{{ url_for('register') }}" class="btn btn-primary btn-sm">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="footer">
+        <p>AI-Based Public Issue Complaint Management System • Report • Manage • Track</p>
+        <p>Built for Hackathon by Chaitanya Patwari & Akash</p>
+    </footer>
+</body>
+</html>

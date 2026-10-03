@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Report Public Issues.<br>Track Progress.<br>Improve Your Community.</h1>
+    <p>A smart AI-powered platform to report potholes, streetlights, water leakage, drainage problems and more — and track them until resolved.</p>
+    <div class="hero-buttons">
+        {% if session.get('user_id') %}
+            <a href="{{ url_for('submit_complaint') }}" class="btn btn-primary">Submit a Complaint</a>
+            <a href="{{ url_for('user_dashboard') }}" class="btn btn-outline">My Dashboard</a>
+        {% else %}
+            <a href="{{ url_for('register') }}" class="btn btn-primary">Get Started</a>
+            <a href="{{ url_for('login') }}" class="btn btn-outline">Login</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="features">
+    <div class="feature-card">
+        <div class="feature-icon">📝</div>
+        <h3>Easy Reporting</h3>
+        <p>Submit complaints with category, description, landmark and optional photo in seconds.</p>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>AI Assistance</h3>
+        <p>Our AI automatically suggests the correct category and helps reduce manual work.</p>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Admin Dashboard</h3>
+        <p>Authorities can view, manage and update complaint status in real time.</p>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Track Status</h3>
+        <p>Get a unique Complaint ID and track progress: Pending → In Progress → Resolved.</p>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 3rem; text-align: center;">
+    <h2>How It Works</h2>
+    <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-top: 1.5rem;">
+        <div style="text-align: center;">
+            <div style="background:#2563eb; color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 0.5rem; font-weight:700;">1</div>
+            <strong>Register / Login</strong>
+        </div>
+        <div style="font-size:1.5rem; color:#94a3b8;">→</div>
+        <div style="text-align: center;">
+            <div style="background:#2563eb; color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 0.5rem; font-weight:700;">2</div>
+            <strong>Submit Complaint</strong>
+        </div>
+        <div style="font-size:1.5rem; color:#94a3b8;">→</div>
+        <div style="text-align: center;">
+            <div style="background:#2563eb; color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 0.5rem; font-weight:700;">3</div>
+            <strong>Admin Reviews</strong>
+        </div>
+        <div style="font-size:1.5rem; color:#94a3b8;">→</div>
+        <div style="text-align: center;">
+            <div style="background:#2563eb; color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 0.5rem; font-weight:700;">4</div>
+            <strong>Status Updated</strong>
+        </div>
+        <div style="font-size:1.5rem; color:#94a3b8;">→</div>
+        <div style="text-align: center;">
+            <div style="background:#2563eb; color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 0.5rem; font-weight:700;">5</div>
+            <strong>You Track</strong>
+        </div>
+    </div>
+</div>
+{% endblock %}

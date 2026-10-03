@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Track Complaint{% endblock %}
+
+{% block content %}
+<div class="track-card">
+    <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+            <div>
+                <h2>{{ complaint.complaint_id }}</h2>
+                <p style="color:#64748b;">Submitted on {{ complaint.created_at.strftime('%d %b %Y, %I:%M %p') }}</p>
+            </div>
+            <div>
+                {% if complaint.status == 'Pending' %}
+                    <span class="badge badge-pending" style="font-size:1rem; padding:0.4rem 1rem;">Pending</span>
+                {% elif complaint.status == 'In Progress' %}
+                    <span class="badge badge-progress" style="font-size:1rem; padding:0.4rem 1rem;">In Progress</span>
+                {% else %}
+                    <span class="badge badge-resolved" style="font-size:1rem; padding:0.4rem 1rem;">Resolved</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <hr style="margin:1.5rem 0; border:none; border-top:1px solid #e2e8f0;">
+
+        <div style="margin-bottom:1rem;">
+            <strong>Category:</strong> {{ complaint.category }}
+            {% if complaint.ai_suggested_category and complaint.ai_suggested_category != complaint.category %}
+                <span style="color:#64748b; font-size:0.9rem;">(AI suggested: {{ complaint.ai_suggested_category }})</span>
+            {% endif %}
+        </div>
+
+        <div style="margin-bottom:1rem;">
+            <strong>Description:</strong>
+            <p style="margin-top:0.3rem;">{{ complaint.description }}</p>
+        </div>
+
+        {% if complaint.landmark %}
+        <div style="margin-bottom:1rem;">
+            <strong>Landmark:</strong> {{ complaint.landmark }}
+        </div>
+        {% endif %}
+
+        {% if complaint.image %}
+        <div style="margin-bottom:1.5rem;">
+            <strong>Attached Image:</strong><br>
+            <img src="{{ url_for('uploaded_file', filename=complaint.image) }}" alt="Complaint image" style="max-width:100%; border-radius:10px; margin-top:0.5rem; border:1px solid #e2e8f0;">
+        </div>
+        {% endif %}
+
+        <h3 style="margin-top:1.5rem;">Status Timeline</h3>
+        <div class="status-timeline">
+            <div class="timeline-item {% if complaint.status in ['Pending', 'In Progress', 'Resolved'] %}done{% endif %}">
+                <strong>Submitted</strong>
+                <div style="color:#64748b; font-size:0.9rem;">{{ complaint.created_at.strftime('%d %b %Y') }}</div>
+            </div>
+            <div class="timeline-item {% if complaint.status == 'In Progress' %}active{% elif complaint.status == 'Resolved' %}done{% endif %}">
+                <strong>In Progress</strong>
+                <div style="color:#64748b; font-size:0.9rem;">
+                    {% if complaint.status in ['In Progress', 'Resolved'] %}Work started{% else %}Waiting for review{% endif %}
+                </div>
+            </div>
+            <div class="timeline-item {% if complaint.status == 'Resolved' %}done active{% endif %}">
+                <strong>Resolved</strong>
+                <div style="color:#64748b; font-size:0.9rem;">
+                    {% if complaint.status == 'Resolved' %}Issue fixed{% else %}Pending{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:2rem;">
+            <a href="{{ url_for('user_dashboard') }}" class="btn btn-primary">← Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

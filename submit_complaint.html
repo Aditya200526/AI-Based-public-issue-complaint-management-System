@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Submit Complaint{% endblock %}
+
+{% block content %}
+<div class="form-container" style="max-width:600px;">
+    <div class="card">
+        <h2 style="margin-bottom:0.5rem;">Submit a Public Issue</h2>
+        <p style="color:#64748b; margin-bottom:1.5rem;">Describe the problem clearly. AI will help suggest the right category.</p>
+        
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Category</label>
+                <select name="category" class="form-control">
+                    <option value="Auto">🤖 Auto-detect with AI (Recommended)</option>
+                    <option value="Streetlight / Electricity">Streetlight / Electricity</option>
+                    <option value="Road / Pothole">Road / Pothole</option>
+                    <option value="Water Supply">Water Supply</option>
+                    <option value="Drainage / Sewage">Drainage / Sewage</option>
+                    <option value="Garbage / Sanitation">Garbage / Sanitation</option>
+                    <option value="Other">Other</option>
+                </select>
+                <div class="form-hint">Leave on Auto and our AI will suggest the category from your description.</div>
+            </div>
+
+            <div class="form-group">
+                <label>Description *</label>
+                <textarea name="description" class="form-control" placeholder="Example: Streetlight near XYZ school is not working for 3 days. Area becomes very dark at night." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Location / Landmark</label>
+                <input type="text" name="landmark" class="form-control" placeholder="Near ABC Park, opposite XYZ shop, Ward 12">
+            </div>
+
+            <div class="form-group">
+                <label>Upload Image (optional)</label>
+                <input type="file" name="image" class="form-control" accept="image/*">
+                <div class="form-hint">Max 5 MB. Helps authorities understand the issue better.</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%; padding:0.85rem;">Submit Complaint</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

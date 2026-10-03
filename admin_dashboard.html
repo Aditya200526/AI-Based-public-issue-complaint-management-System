@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom:1.5rem;">Admin Dashboard</h2>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="number">{{ stats.total }}</div>
+        <div class="label">Total Complaints</div>
+    </div>
+    <div class="stat-card">
+        <div class="number" style="color:#d97706;">{{ stats.pending }}</div>
+        <div class="label">Pending</div>
+    </div>
+    <div class="stat-card">
+        <div class="number" style="color:#2563eb;">{{ stats.in_progress }}</div>
+        <div class="label">In Progress</div>
+    </div>
+    <div class="stat-card">
+        <div class="number" style="color:#16a34a;">{{ stats.resolved }}</div>
+        <div class="label">Resolved</div>
+    </div>
+</div>
+
+<div class="filters">
+    <a href="{{ url_for('admin_dashboard', status='All') }}" class="filter-btn {% if current_filter == 'All' %}active{% endif %}">All</a>
+    <a href="{{ url_for('admin_dashboard', status='Pending') }}" class="filter-btn {% if current_filter == 'Pending' %}active{% endif %}">Pending</a>
+    <a href="{{ url_for('admin_dashboard', status='In Progress') }}" class="filter-btn {% if current_filter == 'In Progress' %}active{% endif %}">In Progress</a>
+    <a href="{{ url_for('admin_dashboard', status='Resolved') }}" class="filter-btn {% if current_filter == 'Resolved' %}active{% endif %}">Resolved</a>
+</div>
+
+{% if complaints %}
+<div class="table-responsive">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Landmark</th>
+                <th>Status</th>
+                <th>Update</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in complaints %}
+            <tr>
+                <td><strong>{{ c.complaint_id }}</strong></td>
+                <td>{{ c.user.name }}</td>
+                <td>
+                    {{ c.category }}
+                    {% if c.ai_suggested_category %}
+                        <br><small style="color:#64748b;">AI: {{ c.ai_suggested_category }}</small>
+                    {% endif %}
+                </td>
+                <td style="max-width:200px;">{{ c.description[:50] }}{% if c.description|length > 50 %}...{% endif %}</td>
+                <td>{{ c.landmark or '—' }}</td>
+                <td>
+                    {% if c.status == 'Pending' %}
+                        <span class="badge badge-pending">Pending</span>
+                    {% elif c.status == 'In Progress' %}
+                        <span class="badge badge-progress">In Progress</span>
+                    {% else %}
+                        <span class="badge badge-resolved">Resolved</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="POST" action="{{ url_for('update_status', id=c.id) }}" style="display:flex; gap:0.4rem; align-items:center;">
+                        <select name="status" class="form-control" style="padding:0.3rem; font-size:0.85rem; width:auto;">
+                            <option value="Pending" {% if c.status == 'Pending' %}selected{% endif %}>Pending</option>
+                            <option value="In Progress" {% if c.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                            <option value="Resolved" {% if c.status == 'Resolved' %}selected{% endif %}>Resolved</option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card" style="text-align:center; padding:2.5rem;">
+    <h3>No complaints found</h3>
+    <p style="color:#64748b;">Try changing the filter or wait for new submissions.</p>
+</div>
+{% endif %}
+{% endblock %}

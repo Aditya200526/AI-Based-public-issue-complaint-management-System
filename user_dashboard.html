@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+    <h2>My Complaints</h2>
+    <a href="{{ url_for('submit_complaint') }}" class="btn btn-primary">+ New Complaint</a>
+</div>
+
+{% if complaints %}
+<div class="table-responsive">
+    <table>
+        <thead>
+            <tr>
+                <th>Complaint ID</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in complaints %}
+            <tr>
+                <td><strong>{{ c.complaint_id }}</strong></td>
+                <td>{{ c.category }}</td>
+                <td style="max-width:250px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ c.description[:60] }}{% if c.description|length > 60 %}...{% endif %}</td>
+                <td>
+                    {% if c.status == 'Pending' %}
+                        <span class="badge badge-pending">Pending</span>
+                    {% elif c.status == 'In Progress' %}
+                        <span class="badge badge-progress">In Progress</span>
+                    {% else %}
+                        <span class="badge badge-resolved">Resolved</span>
+                    {% endif %}
+                </td>
+                <td>{{ c.created_at.strftime('%d %b %Y') }}</td>
+                <td>
+                    <a href="{{ url_for('track', complaint_id=c.complaint_id) }}" class="btn btn-sm btn-primary">Track</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card" style="text-align:center; padding:3rem;">
+    <h3>No complaints yet</h3>
+    <p style="color:#64748b; margin:1rem 0;">Report your first public issue and help improve your community.</p>
+    <a href="{{ url_for('submit_complaint') }}" class="btn btn-primary">Submit Complaint</a>
+</div>
+{% endif %}
+{% endblock %}
